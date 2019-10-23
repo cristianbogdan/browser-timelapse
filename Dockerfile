@@ -1,4 +1,8 @@
-FROM ubuntu:16.04
+FROM phusion/baseimage
+
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]
+
 RUN apt-get clean && apt-get update && apt-get install -y locales
 RUN update-locale LANG=C.UTF-8
 
@@ -18,16 +22,31 @@ RUN apt-get update
 RUN apt-get install -y cron google-chrome-stable
 
 RUN apt-get install -y ghostscript
+RUN apt-get install -y tzdata
+RUN echo "Europe/Bucharest" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 COPY bin/capture-gmaps.sh /
 RUN chmod +x /capture-gmaps.sh
 
-COPY start.sh /
-RUN chmod +x /start.sh
+COPY bin/snapshot.sh /
+RUN chmod +x /snapshot.sh
+
+COPY bin/crontab.in /
+RUN crontab </crontab.in
+
+#COPY start.sh /
+#RUN chmod +x /start.sh
 
 COPY img/logo_api_portrait.png /
 
 RUN mkdir data
-RUN ./capture-gmaps.sh
+RUN mkdir data/work
+RUN mkdir data/out
+VOLUME ["/data"]
 
-ENTRYPOINT ["/start.sh"]
+#ENTRYPOINT ["/start.sh"]
+
+
+# Clean up APT when done.
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
