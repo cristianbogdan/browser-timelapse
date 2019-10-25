@@ -26,11 +26,11 @@ RUN apt-get install -y tzdata
 RUN echo "Europe/Bucharest" > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 
-COPY bin/capture-gmaps.sh /
-RUN chmod +x /capture-gmaps.sh
-
 COPY bin/snapshot.sh /
 RUN chmod +x /snapshot.sh
+
+COPY bin/video.sh /
+RUN chmod +x /video.sh
 
 COPY bin/crontab.in /
 RUN crontab </crontab.in
