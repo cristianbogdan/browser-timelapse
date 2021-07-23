@@ -29,7 +29,7 @@ while read zeline; do
 	mv $IMG_DIR/$NAME/*$YEAR_WEEK*.$IMG_EXT      $WORKDIR
 	
 	# make video from the latest images
-	nice -40 ffmpeg -y -pattern_type glob -i "$WORKDIR/*.$IMG_EXT"  $WORKDIR/_$FILE </dev/null
+	nice -40 ffmpeg -y -pattern_type glob -i "$WORKDIR/*.$IMG_EXT"  -pix_fmt yuv420p $WORKDIR/_$FILE </dev/null
 	# remove images
 	rm  $WORKDIR/*$YEAR_WEEK*.$IMG_EXT
 
@@ -45,7 +45,7 @@ while read zeline; do
 	    # rename _name to name (overwrite the old)
 	    mv $MYDIR/_$FILE    $MYDIR/$FILE
 	fi
-	chmod 644 $MYDIR/$FILE.$EXT
+	chmod 644 $MYDIR/$FILE
     fi
 done</home/cristi/timelapse.conf
 

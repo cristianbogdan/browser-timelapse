@@ -8,6 +8,14 @@ LAST_WEEK=$(env TZ=Europe/Bucharest date --date='1 weeks ago' '+%G_%V')
 DIR=/data/timelapses/snapshots
 EXT=jpg
 LOGO=/home/cristi/gmaps_timelapse/img/logo_api_portrait.png
+MAXPROC=4
+
+cnt=($(ps -ef |grep "test-gmaps.sh >>"  | wc -l))
+if ((cnt > MAXPROC)) ; then
+    echo "skipping $USER_DATE ${cnt} procsses already running" >>$DIR/log.txt
+    exit 1
+fi 
+
 
 while read p; do
     array=($p)
@@ -18,15 +26,9 @@ while read p; do
 	MYDIR=$DIR/${NAME}
 	mkdir $MYDIR &>>/dev/null
      
-	if [ ! -f $MYDIR/.worker ]; then
-	    touch $MYDIR/.worker 
-	    FILE=$MYDIR/${NAME}_$DATE.$EXT
-	    google-chrome --no-sandbox --headless --screenshot=$FILE --window-size=$RES $URL &>>/dev/null
-	    convert  $FILE $LOGO -gravity northeast -geometry +10+10 -composite  -gravity North -pointsize 40 -annotate  +0+100 "${USER_DATE/_/ }" $FILE
-	    chmod 644 $FILE
-	    rm $MYDIR/.worker
-	else
-	    echo "skipping ${NAME}_$DATE.$EXT" >>$DIR/log.txt
-	fi
+	FILE=$MYDIR/${NAME}_$DATE.$EXT
+	google-chrome --no-sandbox --headless --screenshot=$FILE --window-size=$RES $URL &>>/dev/null
+	convert  $FILE $LOGO -gravity northeast -geometry +10+10 -composite  -gravity North -pointsize 40 -annotate  +0+100 "${USER_DATE/_/ }" $FILE
+	chmod 644 $FILE
     fi
 done </home/cristi/timelapse.conf
