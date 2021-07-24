@@ -26,27 +26,35 @@ RUN apt-get install -y tzdata
 RUN echo "Europe/Bucharest" > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 
-COPY bin/snapshot.sh /
-RUN chmod +x /snapshot.sh
-
-COPY bin/video.sh /
-RUN chmod +x /video.sh
-
-COPY bin/crontab.in /
-RUN crontab </crontab.in
-
 #COPY start.sh /
 #RUN chmod +x /start.sh
 
 COPY img/logo_api_portrait.png /
 
-RUN mkdir data
-RUN mkdir data/work
-RUN mkdir data/out
-VOLUME ["/data"]
+# Add a chrome user and setup home dir.
+RUN groupadd --system chrome && \
+    useradd --system --create-home --gid chrome --groups audio,video chrome && \
+    mkdir --parents /home/chrome/reports && \
+    chown --recursive chrome:chrome /home/chrome
+
+USER chrome
+
+COPY bin/snapshot.sh /home/chrome
+
+
+COPY bin/video.sh /home/chrome
+
+
+
+COPY bin/crontab.in /home/chrome
+RUN crontab </home/chrome/crontab.in
+
+USER root
+RUN chmod +x /home/chrome/snapshot.sh
+RUN chmod +x /home/chrome/video.sh
 
 #ENTRYPOINT ["/start.sh"]
 
 
 # Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

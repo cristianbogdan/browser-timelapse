@@ -1,3 +1,3 @@
-* * * * * /snapshot.sh
-4-59/5 * * * * /video.sh
+* * * * * /home/chrome/snapshot.sh 2>&1 >> /home/chrome/log.txt
+59 0-1,3-23 * * * /home/chrome/video.sh 2>&1 >> /home/chrome/vlog.txt
 

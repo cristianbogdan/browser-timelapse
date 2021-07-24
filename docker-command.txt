@@ -1,4 +1,1 @@
-docker run -d -t  --restart unless-stopped \
-          -v /home/cristi/timelapse-data:/data \
-     --security-opt apparmor:unconfined \
-    --name timelapse timelapse-baseimage
+docker run -d -t  --restart unless-stopped -v /home/cristi/timelapse-data:/data   -v /home/cristi:/home/cristi --security-opt apparmor:unconfined --name timelapse timelapze
