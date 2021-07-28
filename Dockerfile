@@ -44,8 +44,6 @@ COPY bin/snapshot.sh /home/chrome
 
 COPY bin/video.sh /home/chrome
 
-
-
 COPY bin/crontab.in /home/chrome
 RUN crontab </home/chrome/crontab.in
 
@@ -53,8 +51,10 @@ USER root
 RUN chmod +x /home/chrome/snapshot.sh
 RUN chmod +x /home/chrome/video.sh
 
-#ENTRYPOINT ["/start.sh"]
+RUN usermod -a -G docker_env chrome
 
+RUN chmod 755 /etc/container_environment
+RUN chmod 644 /etc/container_environment.sh /etc/container_environment.json
 
 # Clean up APT when done.
-#RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

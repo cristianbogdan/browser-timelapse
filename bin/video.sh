@@ -1,11 +1,9 @@
 #!/bin/bash
-DATE=$(env TZ=Europe/Bucharest date "+%G_%V_%m%d_%H:%M")
-YEAR_WEEK=$(env TZ=Europe/Bucharest date "+%G_%V")
-LAST_WEEK=$(env TZ=Europe/Bucharest date --date='1 weeks ago' '+%G_%V')
+DATE=$(env TZ=$TL_TZ date "+%G_%V_%m%d_%H:%M")
+YEAR_WEEK=$(env TZ=$TL_TZ date "+%G_%V")
+LAST_WEEK=$(env TZ=$TL_TZ date --date='1 weeks ago' '+%G_%V')
 
-IMG_DIR=/data/timelapses/snapshots
 IMG_EXT=jpg
-DIR=/data/timelapses/videos
 EXT=mp4
 
 # wait for the last image to be made
@@ -16,17 +14,17 @@ while read zeline; do
     NAME=${array[0]}
  
     if [ -n "$NAME" ] && [[ ${NAME:0:1} != "#" ]]; then
-	MYDIR=$DIR/$NAME
+	MYDIR=$TL_VIDEO_DIR/$NAME
 	WORKDIR=$MYDIR/.work
 	FILE=$YEAR_WEEK.$EXT
 	
 	mkdir $MYDIR &>>/dev/null
 	mkdir $WORKDIR &>>/dev/null
-	ln -sfn $IMG_DIR/$NAME $MYDIR/snapshots 
+	ln -sfn $TL_SNAPSHOT_DIR/$NAME $MYDIR/snapshots 
 	
 	
         #move images to the work dir
-	mv $IMG_DIR/$NAME/*$YEAR_WEEK*.$IMG_EXT      $WORKDIR
+	mv $TL_SNAPSHOT_DIR/$NAME/*$YEAR_WEEK*.$IMG_EXT      $WORKDIR
 	
 	# make video from the latest images
 	nice -40 ffmpeg -y -pattern_type glob -i "$WORKDIR/*.$IMG_EXT"  -pix_fmt yuv420p $WORKDIR/_$FILE </dev/null
@@ -47,5 +45,5 @@ while read zeline; do
 	fi
 	chmod 644 $MYDIR/$FILE
     fi
-done</home/cristi/timelapse.conf
+done<$TL_CONF
 
