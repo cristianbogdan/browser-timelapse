@@ -6,6 +6,8 @@ Docker image that
 
 ## Example configuration
 ```
+# timelapse.conf, use TL_CONF to point to this file
+
 # SD snapshots
 2plus1          1280,720        https://www.google.com/maps/@44.6170083,26.4951149,12z/data=!5m1!1e1
 margina		1280,720        https://www.google.com/maps/@45.8623996,22.282324503,14z/data=!5m1!1e1
