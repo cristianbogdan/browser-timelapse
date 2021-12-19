@@ -1,4 +1,4 @@
-#browser-timelapse
+# browser-timelapse
 Docker image that
 - takes snapshots of certain webpages every minute and produces a timelapse mp4 video for each week
 - resolution for each snapshot/video can be adjusted
