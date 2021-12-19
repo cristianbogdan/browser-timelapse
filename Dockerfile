@@ -1,4 +1,4 @@
-FROM phusion/baseimage
+FROM phusion/baseimage:focal-1.0.0
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
@@ -28,8 +28,6 @@ RUN dpkg-reconfigure -f noninteractive tzdata
 
 #COPY start.sh /
 #RUN chmod +x /start.sh
-
-COPY img/logo_api_portrait.png /
 
 # Add a chrome user and setup home dir.
 RUN groupadd --system chrome && \
