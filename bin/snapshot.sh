@@ -10,7 +10,7 @@ MAXPROC=4
 
 cnt=($(ps -ef |grep "snapshot.sh >>"  | wc -l))
 if ((cnt > MAXPROC)) ; then
-    echo "skipping $USER_DATE ${cnt} processes already running" >>$TL_SNAPSHOT_DIR/log.txt
+    echo "skipping $USER_DATE ${cnt} processes already running" 
     exit 1
 fi 
 
