@@ -25,7 +25,7 @@ while read p; do
 	mkdir $MYDIR &>>/dev/null
      
 	FILE=$MYDIR/${NAME}_$DATE.$EXT
-	google-chrome --no-sandbox --headless --screenshot=$FILE --window-size=$RES $URL &>>/dev/null
+	google-chrome --timeout=$TL_TIMEOUT --no-sandbox --headless --screenshot=$FILE --window-size=$RES $URL &>>/dev/null
 	if test -f "$FILE"; then
 	    convert  $FILE $TL_LOGO -gravity northeast -geometry +10+10 -composite  -gravity North -pointsize 40 -font $TL_FONT -annotate  +0+100 "${USER_DATE/_/ }" $FILE
 	    chmod 644 $FILE
