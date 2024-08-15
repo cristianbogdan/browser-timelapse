@@ -1,18 +1,19 @@
 #!/bin/bash
 
+killall -w -q chrome
 USER_DATE=$(env TZ=$TL_TZ date "+%d.%m_%H:%M")
 DATE=$(env TZ=$TL_TZ date "+%G_%V_%m%d_%H:%M")
 YEAR_WEEK=$(env TZ=$TL_TZ date "+%G_%V")
 LAST_WEEK=$(env TZ=$TL_TZ date --date='1 weeks ago' '+%G_%V')
 
 EXT=jpg
-MAXPROC=4
 
-cnt=($(ps -ef |grep "snapshot.sh >>"  | wc -l))
-if ((cnt > MAXPROC)) ; then
-    echo "skipping $USER_DATE ${cnt} processes already running" 
-    exit 1
-fi 
+#MAXPROC=5
+#cnt=($(ps -ef |grep "snapshot.sh >>"  | wc -l))
+#if ((cnt > MAXPROC)) ; then
+#    echo "skipping $USER_DATE ${cnt} processes already running" 
+#    exit 1
+#fi 
 
 
 while read p; do
